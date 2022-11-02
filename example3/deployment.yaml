@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment1
+spec:
+  selector:
+    matchLabels:
+      app: nginx1
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx1
+    spec:
+      containers:
+      - name: nginx1
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        command: ["/bin/sh", "-c"]
+        args:
+          - while true; do
+              date >> /html/index.html;
+              sleep 1;
+            done
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment2
+spec:
+  selector:
+    matchLabels:
+      app: nginx2
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: nginx2
+    spec:
+      containers:
+      - name: nginx2
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+        command: ["/bin/sh", "-c"]
+        args:
+          - echo "This is nginx 2" >  /usr/share/nginx/html/index.html
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx1
+  labels:
+    app: nginx1
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx2
+  labels:
+    app: nginx2
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: nginx:1.14.2
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress
+spec:
+  rules:
+  - host: nginx1.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          serviceName: nginx1
+          servicePort: 80
+  - host: nginx2.example.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          serviceName: nginx2
+          servicePort: 80
+  - host: nginx.example.com
+    http:
+      paths:
+      - path: "/nginx1" 
+        pathType: Prefix
+        backend:
+          serviceName: nginx1
+          servicePort: 80
+      - path: "/nginx2" 
+        pathType: Prefix
+        backend:
+          serviceName: nginx2
+          servicePort: 80
