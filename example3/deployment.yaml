@@ -86,26 +86,34 @@ spec:
       - pathType: Prefix
         path: "/"
         backend:
-          serviceName: nginx1
-          servicePort: 80
+          service:
+            name: nginx1
+            port: 
+              number: 80
   - host: nginx2.example.com
     http:
       paths:
       - pathType: Prefix
         path: "/"
         backend:
-          serviceName: nginx2
-          servicePort: 80
+          service:
+            name: nginx2
+            port: 
+              number: 80
   - host: nginx.example.com
     http:
       paths:
       - path: "/nginx1" 
         pathType: Prefix
         backend:
-          serviceName: nginx1
-          servicePort: 80
+          service:
+             name: nginx1
+             port: 
+               numer: 80
       - path: "/nginx2" 
         pathType: Prefix
         backend:
-          serviceName: nginx2
-          servicePort: 80
+          service:
+             name: nginx2
+             port: 
+               numer: 80
