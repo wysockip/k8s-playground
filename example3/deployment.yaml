@@ -109,11 +109,11 @@ spec:
           service:
              name: nginx1
              port: 
-               numer: 80
+               number: 80
       - path: "/nginx2" 
         pathType: Prefix
         backend:
           service:
              name: nginx2
              port: 
-               numer: 80
+               number: 80
