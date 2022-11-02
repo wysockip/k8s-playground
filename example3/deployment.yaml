@@ -72,7 +72,7 @@ spec:
   - port: 80
     protocol: TCP
   selector:
-    app: nginx:1.14.2
+    app: nginx:2
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
