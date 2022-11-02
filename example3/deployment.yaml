@@ -15,15 +15,9 @@ spec:
     spec:
       containers:
       - name: nginx1
-        image: nginx:stable
+        image: stenote/nginx-hostname
         ports:
         - containerPort: 80
-        command: ["/bin/sh", "-c"]
-        args:
-          - while true; do
-              date >> /html/index.html;
-              sleep 1;
-            done
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -41,12 +35,9 @@ spec:
     spec:
       containers:
       - name: nginx2
-        image: nginx:stable
+        image: stenote/nginx-hostname
         ports:
         - containerPort: 80
-        command: ["/bin/sh", "-c"]
-        args:
-          - echo "This is nginx 2" >  /usr/share/nginx/html/index.html
 ---
 apiVersion: v1
 kind: Service
